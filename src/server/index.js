@@ -1,0 +1,22 @@
+/* eslint-disable no-useless-catch */
+import config from 'config';
+import express from 'express';
+import consola from 'consola';
+
+import appInit from './app';
+
+(async () => {
+  try {
+    const app = express();
+    await appInit(app);
+
+    const PORT = config.get('port');
+
+    app.listen(PORT, () => {
+      consola.success(`Server running on PORT ${PORT} in ${app.get('env')} mode`);
+    });
+  } catch (error) {
+    // Throw the catched error so it can be reported by sentry
+    throw error;
+  }
+})();
