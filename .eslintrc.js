@@ -10,6 +10,7 @@ module.exports = {
   },
   rules: {
     quotes: ['error', 'single'],
+    'arrow-parens': 'off',
     'linebreak-style': ['error', 'windows'],
   },
 };
