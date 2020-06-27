@@ -102,3 +102,12 @@ dist
 
 # TernJS port file
 .tern-port
+
+# disable random .vscode dir
+.vscode
+
+# Ignore MacOS Desktop ResearchCategoryRepository Store
+.DS_Store
+
+# Ignore .idea folder of intellij IDEA
+.idea/
