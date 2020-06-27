@@ -18,4 +18,14 @@ module.exports = {
       maxItemsPerPage: 100,
     },
   },
+  database: {
+    development: {
+      logging: false,
+      username: process.env.DEV_DB_USER,
+      password: process.env.DEV_DB_PASSWORD,
+      database: process.env.DEV_DB_NAME,
+      host: process.env.DEV_DB_HOST,
+      dialect: process.env.DEV_DB_DIALECT
+    },
+  }
 };

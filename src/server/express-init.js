@@ -8,7 +8,7 @@ import mainRouter from '../routes';
 const appInit = async (app) => {
   app.disable('x-powered-by');
 
-  // Always ensure sentry is setup before any other
+  // Always ensure sentry is setup before middleware registrations
   Sentry.init({ dsn: config.get('sentryDNS') });
   app.use(Sentry.Handlers.requestHandler());
 
@@ -18,8 +18,9 @@ const appInit = async (app) => {
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ limit: '10mb', extended: false }));
 
-  // Register all routes/endpoints
-  app.use(config.get('api.prefix'), mainRouter);
+  // Register routes/endpoints
+  const prefix = `/api/v${config.get('api.version')}`;
+  app.use(prefix, mainRouter);
 
   // The error handler must be before any other error middleware and after all registrations
   app.use(Sentry.Handlers.errorHandler());
