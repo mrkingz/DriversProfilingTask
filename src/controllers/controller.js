@@ -31,6 +31,17 @@ export default class Controller {
     });
   }
 
+  findAll(name) {
+    return (req, res) => this.tryCatchHandler(res, async () => {
+      const data = await this.model.findAll();
+      name = name || `${this.model.name}s`;
+      return {
+        message: `${name} successfully retrieved`,
+        data,
+      };
+    });
+  }
+
   getFillables() {
     return this.fillables;
   }
@@ -61,6 +72,7 @@ export default class Controller {
       NOT_FOUND: 404,
       BAD_REQUEST: 400,
       CONFLICT: 409,
+      FORBIDDEN: 401,
       SERVER_ERROR: 500,
     };
   }

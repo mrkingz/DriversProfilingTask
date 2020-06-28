@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import config from 'config';
 
-import authRouter from './auth';
+import authRouters from './auth';
+import associationRoutes from './association';
 import Validation from '../middlewares/validations';
 
 const mainRouter = Router();
@@ -12,7 +13,9 @@ mainRouter.get('/', (req, res) => {
     message: `Welcome to ${config.get('name')} API`,
   });
 });
+
 mainRouter.use(Validation.validate);
-mainRouter.use('/auth', authRouter);
+mainRouter.use('/auth', authRouters);
+mainRouter.use('/associations', associationRoutes);
 
 export default mainRouter;

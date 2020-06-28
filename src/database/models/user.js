@@ -1,8 +1,12 @@
+/* eslint-disable func-names */
+/* eslint-disable space-before-function-paren */
 import {
   Model,
   UUIDV4,
 } from 'sequelize';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import config from 'config';
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -55,5 +59,11 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
   });
+  User.prototype.confirmPassword = function(password) {
+    return bcrypt.compareSync(password, this.password);
+  };
+  User.prototype.generateToken = function() {
+    return jwt.sign({ userId: this.id }, config.get('auth.secret'), { expiresIn: config.get('auth.expiresIn') });
+  };
   return User;
 };
