@@ -11,6 +11,11 @@ module.exports = {
   rules: {
     quotes: ['error', 'single'],
     'arrow-parens': 'off',
+    'no-param-reassign': 'off',
+    'consistent-return': 'off',
+    'no-use-before-define': 'off',
+    'import/prefer-default-export': 'off',
+    'class-methods-use-this': 'off',
     'linebreak-style': ['error', 'windows'],
   },
 };
