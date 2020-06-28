@@ -4,8 +4,12 @@ const dotenv = require('dotenv');
 dotenv.config();
 module.exports = {
   port: process.env.PORT || 8080,
-  name: process.env.APP_NAME,
+  name: process.env.APP_NAME || 'Drivers Profiling',
   sentryDNS: process.env.SENTRY_DNS,
+  auth: {
+    expiresIn: 86400,
+    secret: process.env.JWT_SECRET,
+  },
   /**
 	 * API specific configs
 	 */

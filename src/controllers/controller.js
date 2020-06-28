@@ -50,6 +50,7 @@ export default class Controller {
         ? response()
         : this.successResponse(res, response);
     } catch (error) {
+      console.log('Error :::::::::::::: ', error);
       return this.errorResponse(res, error);
     }
   }

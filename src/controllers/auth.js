@@ -8,6 +8,7 @@ class AuthController extends Controller {
     super(User);
     this.fillables = ['firstname', 'lastname', 'email', 'password'];
     this.checkEmail = this.checkEmail.bind(this);
+    this.signin = this.signin.bind(this);
   }
 
   /**
@@ -21,15 +22,42 @@ class AuthController extends Controller {
   checkEmail(req, res, next) {
     return this.tryCatchHandler(res, async () => {
       const { body: { email } } = req;
-      const emailAddress = await User.findOne({ where: { email } });
+      const user = await User.findOne({ where: { email }, attributes: ['email'] });
 
-      if (emailAddress) {
+      if (user) {
         const error = new Error();
         error.errors = { email: 'Email address has been used' };
         error.status = this.getStatus().CONFLICT;
         throw error;
       }
       return next;
+    });
+  }
+
+  /**
+   * Authenticate a user
+   *
+   * @param {Request} req the Http request object
+   * @param {Response} res the Http response object
+   * @returns {Object} object containing the status code, message and data
+   * @memberof AuthController
+   */
+  signin(req, res) {
+    return this.tryCatchHandler(res, async () => {
+      const { body: { email, password } } = req;
+      const user = await User.findOne({ where: { email } });
+      if (user.confirmPassword(password)) {
+        const token = await user.generateToken();
+        return {
+          message: 'Authentication successful',
+          data: {
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
+            token,
+          },
+        };
+      }
     });
   }
 }

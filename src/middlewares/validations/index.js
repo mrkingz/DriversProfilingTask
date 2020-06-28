@@ -20,17 +20,19 @@ class Validation extends Controller {
   validate(req, res, next) {
     this.tryCatchHandler(res, async () => {
       const path = req.path.split('/').pop();
-
-      const { hasError, errors, fields } = await validator(this.getSchema(path), req.body);
-      if (hasError) {
-        const error = new Error();
-        error.errors = errors;
-        error.status = this.getStatus().BAD_REQUEST;
-        throw error;
-      } else {
-        req.body = fields;
-        return next;
+      const schema = this.getSchema(path);
+      if (schema) {
+        const { hasError, errors, fields } = await validator(schema, req.body);
+        if (hasError) {
+          const error = new Error();
+          error.errors = errors;
+          error.status = this.getStatus().BAD_REQUEST;
+          throw error;
+        } else {
+          req.body = fields;
+        }
       }
+      return next;
     });
   }
 
