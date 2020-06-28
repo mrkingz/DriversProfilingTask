@@ -10,6 +10,7 @@ module.exports = {
   },
   rules: {
     quotes: ['error', 'single'],
+    'func-names': 'off',
     'comma-dangle': 'off',
     'arrow-parens': 'off',
     'no-param-reassign': 'off',

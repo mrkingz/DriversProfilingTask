@@ -1,5 +1,3 @@
-/* eslint-disable func-names */
-/* eslint-disable space-before-function-paren */
 import {
   Model,
   UUIDV4,
@@ -15,8 +13,21 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate() {
-      // define association here
+    static associate(models) {
+      User.hasMany(models.Membership);
+      User.belongsToMany(models.Association, {
+        through: models.Membership,
+        onDelete: 'RESTRICT',
+        onUpdate: 'CASCADE',
+        foreignKey: {
+          name: 'driverId',
+          allowNull: false,
+        },
+        otherKey: {
+          name: 'associationId',
+          allowNull: false
+        }
+      });
     }
   }
   User.init({
@@ -24,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: UUIDV4,
+      allowNull: false,
     },
     firstname: {
       type: DataTypes.STRING,
@@ -59,10 +71,10 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
   });
-  User.prototype.confirmPassword = function(password) {
+  User.prototype.confirmPassword = function (password) {
     return bcrypt.compareSync(password, this.password);
   };
-  User.prototype.generateToken = function() {
+  User.prototype.generateToken = function () {
     return jwt.sign({ userId: this.id }, config.get('auth.secret'), { expiresIn: config.get('auth.expiresIn') });
   };
   return User;
