@@ -1,5 +1,5 @@
 import Controller from '../../controllers/controller';
-import { getSignUpSchema } from '../../validations/schemas/user';
+import { getSignUpSchema, getSignInSchema } from '../../validations/schemas/user';
 import validator from '../../validations/validator';
 
 class Validation extends Controller {
@@ -39,6 +39,7 @@ class Validation extends Controller {
   getSchema(path) {
     const schemas = {
       signup: getSignUpSchema(),
+      signin: getSignInSchema()
     };
     return schemas[path];
   }

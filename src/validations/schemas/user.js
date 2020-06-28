@@ -7,6 +7,18 @@ export const getSignUpSchema = () => Joi.object()
   .keys(emailSchema())
   .keys(passwordSchema());
 
+export const getSignInSchema = () => Joi.object().keys({
+  email: Joi.string()
+    .trim()
+    .lowercase()
+    .required()
+    .messages({
+      'string.empty': 'E-mail address is not allowed to be empty',
+    }),
+  password: Joi.string()
+    .required(),
+});
+
 const emailSchema = message => ({
   email: Joi.string()
     .trim()
