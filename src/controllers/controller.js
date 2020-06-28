@@ -1,14 +1,21 @@
 import * as Sentry from '@sentry/node';
-import consola from 'consola';
 
-/* eslint-disable class-methods-use-this */
 export default class Controller {
   constructor(model) {
     this.model = model;
     this.fillables = [];
+    this.protected = [];
     this.create = this.create.bind(this);
   }
 
+  /**
+   * Create a new instance of a model in database
+   *
+   * @param {Request} req the Http request object
+   * @param {Response} res the Http response object
+   * @returns {Object} object containing the status code, message and data
+   * @memberof Controller
+   */
   create(req, res) {
     return this.tryCatchHandler(res, async () => {
       const fillables = this.getFillables().length > 0
@@ -89,13 +96,10 @@ export default class Controller {
    */
   errorResponse(res, error) {
     let { status, message } = error;
-    if (res.app.settings.env === 'development') {
-      consola.error(error);
-    }
 
     if (!status) {
       status = this.getStatus().SERVER_ERROR;
-      message = 'Internal error ocurred, try again';
+      message = 'Internal error ocurred, try again!';
       Sentry.captureException(error);
     }
 
