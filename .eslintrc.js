@@ -11,6 +11,8 @@ module.exports = {
   rules: {
     quotes: ['error', 'single'],
     'arrow-parens': 'off',
+    'no-param-reassign': 'off',
+    'consistent-return': 'off',
     'linebreak-style': ['error', 'windows'],
   },
 };

@@ -1,5 +1,5 @@
 /* eslint-disable no-tabs */
-import dotenv from 'dotenv';
+const dotenv = require('dotenv');
 
 dotenv.config();
 module.exports = {
@@ -18,14 +18,13 @@ module.exports = {
       maxItemsPerPage: 100,
     },
   },
-  database: {
-    development: {
-      logging: false,
-      username: process.env.DEV_DB_USER,
-      password: process.env.DEV_DB_PASSWORD,
-      database: process.env.DEV_DB_NAME,
-      host: process.env.DEV_DB_HOST,
-      dialect: process.env.DEV_DB_DIALECT
-    },
-  }
+
+  development: {
+    logging: false,
+    username: process.env.DEV_DB_USER,
+    password: process.env.DEV_DB_PASSWORD,
+    database: process.env.DEV_DB_NAME,
+    host: process.env.DEV_DB_HOST,
+    dialect: process.env.DEV_DB_DIALECT
+  },
 };
