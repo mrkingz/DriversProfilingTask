@@ -39,8 +39,8 @@ export default class Controller {
   async tryCatchHandler(res, callback) {
     try {
       const response = await callback();
-      return (response.next === 'function')
-        ? response.next()
+      return (typeof response === 'function')
+        ? response()
         : this.successResponse(res, response);
     } catch (error) {
       return this.errorResponse(res, error);
@@ -53,7 +53,7 @@ export default class Controller {
       CREATED: 201,
       NOT_FOUND: 404,
       BAD_REQUEST: 400,
-      INVALID: 402,
+      CONFLICT: 409,
       SERVER_ERROR: 500,
     };
   }
@@ -62,13 +62,13 @@ export default class Controller {
    * Handles success response
    *
    * @param {Response} res
-   * @param {Object} options the response data
+   * @param {Object} response the response data
    * @memberof Controller
    */
-  successResponse(res, options) {
+  successResponse(res, response) {
     const {
       status, success, message, data,
-    } = options;
+    } = response;
     const { OK, BAD_REQUEST } = this.getStatus();
 
     const code = status || OK;
@@ -102,7 +102,7 @@ export default class Controller {
     res.status(status)
       .json({
         success: false,
-        error: message,
+        error: message || error.errors,
       });
   }
 }
