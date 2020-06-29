@@ -19,5 +19,6 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'class-methods-use-this': 'off',
     'linebreak-style': ['error', 'windows'],
+    'nonblock-statement-body-position': 'off',
   },
 };

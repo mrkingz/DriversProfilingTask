@@ -84,9 +84,9 @@ class AuthController extends Controller {
       try {
         if (token) {
           const decoded = await jwt.verify(token.trim(), config.get('auth.secret'));
-          const user = await User.findByPk(decoded.userId);
+          const user = await User.findByPk(decoded.userId, { attributes: { exclude: ['password'] } });
           if (user) {
-            req.userId = decoded.userId;
+            req.user = user;
             return next;
           }
           message = 'Invalid token provided';

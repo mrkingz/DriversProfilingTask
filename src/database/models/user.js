@@ -14,13 +14,19 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      User.hasMany(models.Membership);
+      User.hasMany(models.Membership, {
+        foreignKey: {
+          name: 'userId',
+          allowNull: false,
+        },
+      });
       User.belongsToMany(models.Association, {
         through: models.Membership,
         onDelete: 'RESTRICT',
         onUpdate: 'CASCADE',
+        as: 'associations',
         foreignKey: {
-          name: 'driverId',
+          name: 'userId',
           allowNull: false,
         },
         otherKey: {
