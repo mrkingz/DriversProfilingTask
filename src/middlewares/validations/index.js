@@ -1,3 +1,6 @@
+import { isUuid } from 'uuidv4';
+import isEmpty from 'lodash.isempty';
+
 import Controller from '../../controllers/controller';
 import { getSignUpSchema, getSignInSchema } from '../../validations/schemas/user';
 import validator from '../../validations/validator';
@@ -5,7 +8,8 @@ import validator from '../../validations/validator';
 class Validation extends Controller {
   constructor() {
     super();
-    this.validate = this.validate.bind(this);
+    this.validateFields = this.validateFields.bind(this);
+    this.validateParam = this.validateParam.bind(this);
   }
 
   /**
@@ -17,22 +21,36 @@ class Validation extends Controller {
    * @param {Function} next express next function to delegate request to the next handler
    * @memberof Validation
    */
-  validate(req, res, next) {
+  validateFields(req, res, next) {
     this.tryCatchHandler(res, async () => {
-      const path = req.path.split('/').pop();
-      const schema = this.getSchema(path);
-      if (schema) {
-        const { hasError, errors, fields } = await validator(schema, req.body);
-        if (hasError) {
-          const error = new Error();
-          error.errors = errors;
-          error.status = this.getStatus().BAD_REQUEST;
-          throw error;
-        } else {
-          req.body = fields;
+      if (!isEmpty(req.body)) {
+        const schema = this.getSchema(req.path.split('/').pop());
+
+        if (schema) {
+          const { hasError, errors, fields } = await validator(schema, req.body);
+          if (hasError) {
+            const error = new Error();
+            error.errors = errors;
+            error.status = this.getStatus().BAD_REQUEST;
+            throw error;
+          } else {
+            req.body = fields;
+          }
         }
       }
       return next;
+    });
+  }
+
+  validateParam(req, res, next) {
+    this.tryCatchHandler(res, async () => {
+      const { params: { id } } = req;
+      if (isUuid(id)) {
+        return next;
+      }
+      const error = new Error('Invalid uuid provided');
+      error.status = this.getStatus().BAD_REQUEST;
+      throw error;
     });
   }
 

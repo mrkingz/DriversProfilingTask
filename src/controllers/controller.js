@@ -1,4 +1,6 @@
 import * as Sentry from '@sentry/node';
+import isEmpty from 'lodash.isempty';
+import consola from 'consola';
 
 export default class Controller {
   constructor(model) {
@@ -6,6 +8,7 @@ export default class Controller {
     this.fillables = [];
     this.protected = [];
     this.create = this.create.bind(this);
+    this.findOne = this.findOne.bind(this);
   }
 
   /**
@@ -36,7 +39,19 @@ export default class Controller {
       const data = await this.model.findAll();
       name = name || `${this.model.name}s`;
       return {
-        message: `${name} successfully retrieved`,
+        message: isEmpty(data) ? `No record of ${name.toLowerCase()} found` : `${name} successfully retrieved`,
+        data,
+      };
+    });
+  }
+
+  findOne(req, res) {
+    return this.tryCatchHandler(res, async () => {
+      const { params: { id } } = req;
+      const data = await this.model.findByPk(id);
+      const { name } = this.model;
+      return {
+        message: isEmpty(data) ? `No ${name.toLowerCase()} found` : `${name} successfully retrieved`,
         data,
       };
     });
@@ -114,6 +129,8 @@ export default class Controller {
       message = 'Internal error ocurred, try again!';
       Sentry.captureException(error);
     }
+
+    if (res.app.settings.env === 'development') consola.error(error);
 
     res.status(status)
       .json({

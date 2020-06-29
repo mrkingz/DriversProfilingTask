@@ -14,7 +14,7 @@ mainRouter.get('/', (req, res) => {
   });
 });
 
-mainRouter.use(Validation.validate);
+mainRouter.use(Validation.validateFields);
 mainRouter.use('/auth', authRouters);
 mainRouter.use('/associations', associationRoutes);
 

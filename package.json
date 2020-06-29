@@ -17,7 +17,10 @@
     "lint:fix": "eslint ./**/*.js --fix",
     "migrate": "node_modules/.bin/sequelize db:migrate",
     "migrate:undo": "node_modules/.bin/sequelize db:migrate:undo:all",
-    "migrate:refresh": "yarn migrate:undo && yarn migrate"
+    "migrate:refresh": "yarn migrate:undo && yarn migrate",
+    "seed": "node_modules/.bin/sequelize db:seed:all",
+    "seed:undo": "node_modules/.bin/sequelize db:seed:undo:all",
+    "seed:refresh": "yarn seed:undo && yarn seed"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
@@ -30,10 +33,13 @@
     "express": "^4.17.1",
     "helmet": "^3.23.3",
     "jsonwebtoken": "^8.5.1",
+    "lodash.isempty": "^4.4.0",
+    "morgan": "^1.10.0",
     "pg": "^8.2.1",
     "pg-hstore": "^2.3.3",
     "rimraf": "^3.0.2",
-    "sequelize": "^6.2.2"
+    "sequelize": "^6.2.2",
+    "uuidv4": "^6.1.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.3",

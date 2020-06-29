@@ -2,6 +2,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import * as Sentry from '@sentry/node';
 import express from 'express';
+import logger from 'morgan';
 import config from 'config';
 import mainRouter from '../routes';
 
@@ -13,6 +14,7 @@ const appInit = async (app) => {
   app.use(Sentry.Handlers.requestHandler());
 
   // Register all middlewares
+  app.use(logger('dev'));
   app.use(cors());
   app.use(helmet());
   app.use(express.json({ limit: '10mb' }));

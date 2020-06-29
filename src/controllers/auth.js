@@ -49,7 +49,7 @@ class AuthController extends Controller {
     return this.tryCatchHandler(res, async () => {
       const { body: { email, password } } = req;
       const user = await User.findOne({ where: { email } });
-      if (user.confirmPassword(password)) {
+      if (user && user.confirmPassword(password)) {
         const token = await user.generateToken();
         return {
           message: 'Authentication successful',
